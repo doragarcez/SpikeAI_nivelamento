@@ -44,6 +44,7 @@ out = cv2.VideoWriter(output_video_path, fourcc, fps, (widht, height))
 # Inicializando variaveis para armazenar os dados dos landmarks
 frame_number = 0
 landmark_csv = []
+last_timestamp_ms = 0
 
 with PoseLandmarker.create_from_options(options) as landmarker:
     while cap.isOpened():
@@ -59,11 +60,14 @@ with PoseLandmarker.create_from_options(options) as landmarker:
 
         # Processamento do frame
         frame_timestamp_ms = int(cap.get(cv2.CAP_PROP_POS_MSEC))
+        last_timestamp_ms = frame_timestamp_ms
         pose_landmarker_result = landmarker.detect_for_video(mp_image, frame_timestamp_ms)
 
-        # Se houver landmarks detectados, adiciona os dados ao CSV
+        # Adiciona os dados dos landmarks ao CSV, idependentemente de ter sido detectado ou não, para manter a consistência do número de frames
         if pose_landmarker_result.pose_landmarks:
             append_landmarks(pose_landmarker_result.pose_landmarks[0], frame_number, landmark_csv)
+        else:
+            append_landmarks(None, frame_number, landmark_csv)
 
         # Aplica o fundo preto e desenha os landmarks no frame
         rgb_with_black_background = apply_black_background(rgb, pose_landmarker_result)
@@ -77,6 +81,20 @@ with PoseLandmarker.create_from_options(options) as landmarker:
             break
 
         frame_number += 1
+
+# Calcula o número de frames com e sem landmarks detectados 
+frames_detectados = sum(1 for row in landmark_csv if row[-1] == True) // 33
+frames_nao_detectados = sum(1 for row in landmark_csv if row[-1] == False) // 33
+
+# Exibe as informações do vídeo e do processamento
+print("Video: ", input_video_path)
+print("Resolução: ", widht, "x", height)
+print("FPS: ", fps)
+print("Número de frames processados: ", frame_number)
+print("Frames com landmarks detectados: ", frames_detectados)
+print("Frames sem landmarks detectados: ", frames_nao_detectados)
+print("Taxa de detecção: ", frames_detectados / frame_number * 100, "%")
+print("Tempo de processamento: ", last_timestamp_ms / 1000, "segundos")
 
 cap.release()
 out.release()
