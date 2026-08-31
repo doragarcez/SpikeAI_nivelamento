@@ -43,7 +43,7 @@ pip install -r requirements.txt
 
 1. Coloque o vídeo de entrada em `input/` (por padrão o script espera `input/ataque.mp4`).
 2. Garanta que o modelo `pose_landmarker_heavy.task` esteja em `model/`.
-3. Execute a partir da pasta `src`:
+3. Execute:
 
 ```bash
 python src/main.py
