@@ -46,8 +46,7 @@ pip install -r requirements.txt
 3. Execute a partir da pasta `src`:
 
 ```bash
-cd src
-python main.py
+python src/main.py
 ```
 
 Os resultados serão salvos em:
