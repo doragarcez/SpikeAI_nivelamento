@@ -63,7 +63,7 @@ with PoseLandmarker.create_from_options(options) as landmarker:
         last_timestamp_ms = frame_timestamp_ms
         pose_landmarker_result = landmarker.detect_for_video(mp_image, frame_timestamp_ms)
 
-        # Adiciona os dados dos landmarks ao CSV, idependentemente de ter sido detectado ou não, para manter a consistência do número de frames
+        # Adiciona os dados dos landmarks ao CSV, independentemente de ter sido detectado ou não, para manter a consistência do número de frames
         if pose_landmarker_result.pose_landmarks:
             append_landmarks(pose_landmarker_result.pose_landmarks[0], frame_number, landmark_csv)
         else:

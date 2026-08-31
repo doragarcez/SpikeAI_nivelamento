@@ -5,7 +5,7 @@ def apply_black_background(rgb_image, detection_result):
     if not detection_result.segmentation_masks:
         return np.zeros_like(rgb_image)
 
-    mask = detection_result.segmentation_mask[0].numpy_view()
+    mask = detection_result.segmentation_masks[0].numpy_view()
 
     condition = mask > 0.5
 

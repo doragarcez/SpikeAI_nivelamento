@@ -7,9 +7,11 @@ def draw_landmarks_on_image(rgb_image, detection_result):
   pose_landmarks_list = detection_result.pose_landmarks
   annotated_image = np.copy(rgb_image)
 
+  # Define o estilo de desenho para os landmarks e conexões
   pose_landmark_style = drawing_styles.get_default_pose_landmarks_style()
   pose_connection_style = drawing_utils.DrawingSpec(color=(0, 255, 0), thickness=2)
 
+  # Desenha os landmarks e conexões na imagem
   for pose_landmarks in pose_landmarks_list:
     drawing_utils.draw_landmarks(
         image=annotated_image,
